@@ -1,9 +1,4 @@
 ---
-
-- name: Waiting for remote 
-  wait_for_connection:
-    delay: 30
-    timeout: 60
     
 - include: tasks/oah-install.yml
   when: oah_command == "install"
