@@ -1,0 +1,13 @@
+---
+- name: Check Google Chrome Installation
+  ansible.builtin.shell: google-chrome --version | awk '{print $3}'
+  register: chrome_output
+  ignore_errors: true
+
+- ansible.builtin.debug:
+    msg: "Google Chrome {{ chrome_output.stdout }} Installed"
+  when: chrome_output.rc == 0
+
+- ansible.builtin.debug:
+    msg: "Google Chrome Not Found"
+  when: chrome_output.rc != 0

@@ -1,0 +1,10 @@
+---
+- name: Check Google Chrome Installation
+  ansible.builtin.shell: google-chrome --version
+  register: chrome_output
+  ignore_errors: true
+
+- name: Remove Google Chrome
+  become: yes
+  ansible.builtin.shell: dpkg -r google-chrome-stable
+  when: chrome_output.rc == 0

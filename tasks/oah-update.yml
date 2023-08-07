@@ -1,0 +1,19 @@
+---
+- name: Check Google Chrome Installation
+  ansible.builtin.shell: google-chrome --version
+  register: chrome_output
+  ignore_errors: true
+
+- name: Update Google Chrome
+  become: yes
+  block:
+    - name: Removing Google Chrome
+      include_tasks: oah-remove.yml
+
+    - name: Installing Google Chrome
+      include_tasks: oah-install.yml
+  when: chrome_output.rc == 0
+
+- ansible.builtin.debug:
+    msg: "Google Chrome Not Found"
+  when: chrome_output.rc != 0
