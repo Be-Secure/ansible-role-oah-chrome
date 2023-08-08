@@ -7,11 +7,12 @@
 - name: Install Google Chrome Package
   become: yes
   block:
-    - name: Update apt Packages
+    - name: Update and upgrade apt packages
       apt:
+        upgrade: yes
         update_cache: yes
         cache_valid_time: 86400
-        
+            
     - name: Install Chrome Dependencies
       ansible.builtin.shell: apt -y install fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libatspi2.0-0 libcairo2 libgbm1 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libu2f-udev libvulkan1 libx11-6 libxcb1 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxkbcommon0 libxrandr2 xdg-utils
         
