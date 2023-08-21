@@ -1,0 +1,33 @@
+---
+- name: Check Google Chrome Installation
+  ansible.builtin.shell: google-chrome --version
+  register: chrome_output
+  ignore_errors: true
+
+- name: Install Google Chrome Package
+  become: yes
+  block:
+    - name: Update and upgrade apt packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
+            
+    - name: Install Chrome Dependencies
+      ansible.builtin.shell: apt -y install fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libatspi2.0-0 libcairo2 libgbm1 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libu2f-udev libvulkan1 libx11-6 libxcb1 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxkbcommon0 libxrandr2 xdg-utils
+        
+    - name: Download Google Chrome Package
+      ansible.builtin.get_url:
+        url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        dest: /tmp/
+        force_basic_auth: yes
+      register: download
+      
+    - name: Installing Google Chrome
+      ansible.builtin.shell: dpkg -i /tmp/google-chrome-stable_current_amd64.deb
+      when: download is defined
+
+    - name: Cleanup Memory
+      ansible.builtin.shell: rm -rf /tmp/google-chrome-stable_current_amd64.deb
+      when: download is defined
+  when: chrome_output.rc != 1
